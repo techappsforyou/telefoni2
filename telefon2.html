@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phone Packages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    html,body{margin:0;padding:0;background:#f6f8fd;font-family:'Montserrat',Arial,sans-serif;}
+    body{min-height:100vh;}
+    .container {
+      max-width:410px;
+      margin:0 auto;
+      min-height:100vh;
+      background:#fafdff;
+      box-shadow:0 0 18px #bed3f92a;
+      padding:0 0 64px 0;
+      border-radius:0 0 22px 22px;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+    }
+    .main-header {
+      width:100%;padding:17px 0 13px 0;
+      background:linear-gradient(91deg,#2e63ec 60%,#6d98fa 100%);
+      color:#fff;
+      font-size:23px;
+      font-weight:700;
+      letter-spacing:.03em;
+      border-radius:0 0 20px 20px;
+      box-shadow:0 4px 24px #3f75f126;
+      text-align:center;
+      margin-bottom:8px;
+    }
+    .selector-area {width:95%;margin:0 auto;}
+    .select-label {font-size:15px;color:#263453;margin-bottom:3px;margin-top:10px;}
+    .brand-select-btn {
+      width:100%; padding:11px 0 11px 15px; border-radius:10px;
+      border:2px solid #d1e0fa; font-size:17px; background:#f6f8ff;
+      color:#263453;font-family:'Montserrat',Arial,sans-serif; font-weight:600;
+      margin-bottom:1px;transition:.18s;cursor:pointer;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 1px 4px #e4edfc44; outline:none;
+      position:relative;text-align:left;
+    }
+    .brand-select-btn:after {
+      content:"";display:inline-block;margin-left:7px;
+      border:solid #8da4d9;border-width:0 2px 2px 0;padding:4px;transform:rotate(45deg);
+      transition:.18s;position:relative;top:2px;
+    }
+    .brand-popup-bg {
+      display:none;position:fixed;inset:0;z-index:55;
+      background:rgba(42,54,88,0.38);animation:fadeIn .18s;
+      align-items:center;justify-content:center;
+    }
+    .brand-popup {
+      background:#fff; border-radius:14px; min-width:65vw;
+      max-width:320px;box-shadow:0 6px 28px #4773db22;
+      padding:18px 14px;animation:popupShow .19s;
+    }
+    .brand-popup-title {
+      font-size:17px;font-weight:700;margin-bottom:8px;color:#2957bb;text-align:center;
+    }
+    .brand-list {
+      display:flex;flex-direction:column;gap:9px;
+    }
+    .brand-item {
+      font-size:16px;padding:9px 0 7px 0;text-align:center;
+      border-radius:8px;cursor:pointer;transition:.16s;
+      background:#f5f7fe;font-weight:600;color:#29406d;
+      border:2px solid #e7eefd;
+    }
+    .brand-item.selected, .brand-item:hover {
+      background:#3577e7;color:#fff;border-color:#3577e7;
+      box-shadow:0 2px 9px #3875eb23;
+    }
+    .color-select-box {
+      width:100%;display:flex;gap:12px;margin:10px 0 2px 0;
+      flex-wrap:wrap;justify-content:center;
+    }
+    .color-dot {
+      width:35px;height:35px;border-radius:50%;
+      border:2.2px solid #dae6f9;box-shadow:0 2px 9px #a4b4d11f;
+      cursor:pointer;transition:.14s;
+      display:flex;align-items:center;justify-content:center;
+      font-size:15px;font-weight:700;margin-bottom:5px;
+      position:relative;outline:none;
+    }
+    .color-dot.selected { border-color:#3577e7; box-shadow:0 0 0 5px #4e8bff17;}
+    .memory-select-box {
+      width:99%;display:grid;grid-template-columns:1fr 1fr;
+      gap:10px;margin:10px auto 2px auto;justify-items:center;
+    }
+    .memory-btn {
+      border-radius:10px;border:2px solid #d2dffa;
+      background:#f5faff;color:#384973;font-weight:700;
+      padding:8.5px 0;font-size:15px;cursor:pointer;transition:.13s;
+      box-shadow:0 1px 5px #d6e5f744;
+      margin-bottom:0;width:91%;
+    }
+    .memory-btn.selected {
+      background:#3577e7;color:#fff;border-color:#3577e7;
+      box-shadow:0 2px 8px #74a7fc2a;
+    }
+    .phone-carousel {
+      margin:15px auto 0 auto;width:100%;
+      display:flex;align-items:center;justify-content:center;
+      min-height:195px;user-select:none;touch-action:pan-x;
+      position:relative;
+    }
+    .phone-box {
+      width:92vw;max-width:330px;
+      background:#fff;border-radius:17px;box-shadow:0 5px 19px #d1e3fd36;
+      display:flex;flex-direction:column;align-items:center;
+      padding:11px 2px 11px 2px;transition:.22s;
+      border:2px solid #e9eefd;min-height:180px;cursor:pointer;position:relative;
+      overflow:hidden;
+      margin:0 auto;
+    }
+    .phone-img {
+      width:110px;height:140px;object-fit:contain;
+      margin-bottom:6px;transition:.21s;
+      display:block;
+    }
+    .phone-name {font-size:17px;color:#18233a;font-weight:700;}
+    .phone-box.animate-left, .phone-box.animate-right {animation-duration:.41s;animation-fill-mode:forwards;}
+    .phone-box.animate-left {animation-name:swipeLeft;}
+    .phone-box.animate-right {animation-name:swipeRight;}
+    @keyframes swipeLeft {
+      0%{transform:translateX(0);opacity:1;}
+      49%{transform:translateX(-140px);opacity:.2;}
+      50%{transform:translateX(180px);opacity:0;}
+      99%{transform:translateX(0);opacity:0;}
+      100%{transform:translateX(0);opacity:1;}
+    }
+    @keyframes swipeRight {
+      0%{transform:translateX(0);opacity:1;}
+      49%{transform:translateX(140px);opacity:.2;}
+      50%{transform:translateX(-180px);opacity:0;}
+      99%{transform:translateX(0);opacity:0;}
+      100%{transform:translateX(0);opacity:1;}
+    }
+    .modal-bg {
+      position:fixed;inset:0;background:rgba(24,32,48,0.8);z-index:33;
+      display:flex;align-items:center;justify-content:center;animation:fadeIn .19s;
+    }
+    .modal-content {
+      background:#fff;border-radius:22px;padding:38px 16px 28px 16px;text-align:center;
+      box-shadow:0 7px 36px #bad3fa44;
+      min-width:200px; min-height:105px;
+    }
+    .checkmark {
+      font-size:50px;color:#37e863;margin-bottom:9px;font-weight:700;
+    }
+    .modal-text {font-size:19px;font-weight:700;color:#27333e;}
+    .loader {
+      margin:0 auto 13px auto;
+      border:6px solid #e8eefb; border-top:6px solid #4a7bf7;
+      border-radius:50%; width:42px; height:42px;
+      animation:spin 1.05s linear infinite;
+      display:inline-block;
+    }
+    @keyframes spin {100%{transform:rotate(360deg);}}
+    .loading-message {
+      font-size:16px; color:#2a3c61; font-weight:600; margin-bottom:7px;
+      letter-spacing:0.01em;animation: fadeInTxt 0.4s;
+    }
+    @keyframes fadeIn {from{opacity:0;}to{opacity:1;}}
+    @keyframes fadeInTxt {from{opacity:0;}to{opacity:1;}}
+    .bottom-nav {
+      position:fixed;left:0;right:0;bottom:0;background:#f5faff;z-index:10;
+      box-shadow:0 -2px 14px #d6e4f12a;border-radius:19px 19px 0 0;height:49px;
+      display:flex;align-items:center;justify-content:space-around;
+    }
+    .nav-ico {font-size:20px;color:#7a9eea;padding:6px 0 2px 0;opacity:.86;}
+    .nav-ico.active {color:#3577e7;opacity:1;}
+    @media (max-width:460px){
+      .container{padding:0 0 56px 0;}
+      .selector-area{width:99%;}
+      .main-header{font-size:20px;padding:14px 0 9px 0;}
+      .phone-box{width:98vw;max-width:330px;}
+      .modal-content{padding:19px 2vw 14px 2vw;}
+      .phone-img{width:120px;height:158px;}
+    }
+    @keyframes popupShow {from{transform:scale(.92);opacity:0;}to{transform:scale(1);opacity:1;}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="main-header">Phone Packages</div>
+    <div class="selector-area">
+      <div class="select-label">Brand</div>
+      <button class="brand-select-btn" id="brand-btn"></button>
+      <!-- Popup -->
+      <div class="brand-popup-bg" id="brand-popup-bg">
+        <div class="brand-popup">
+          <div class="brand-popup-title">Choose Brand</div>
+          <div class="brand-list" id="brand-list"></div>
+        </div>
+      </div>
+      <div class="select-label" style="margin-top:9px;">Color</div>
+      <div class="color-select-box" id="color-select-box"></div>
+      <div class="select-label">Memory capacity</div>
+      <div class="memory-select-box" id="memory-select-box"></div>
+    </div>
+    <!-- Карусель (стрелки убраны, свайп только пальцем) -->
+    <div class="phone-carousel" id="carousel-area" style="opacity:0;pointer-events:none;">
+      <div class="phone-box" id="phone-box">
+        <img src="" id="phone-img" class="phone-img" alt="Phone">
+        <div class="phone-name" id="phone-name"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal: загрузка и успех -->
+  <div class="modal-bg" id="modal-bg" style="display:none;">
+    <div class="modal-content" id="modal-loading">
+      <div class="loader"></div>
+      <div class="loading-message">Searching for available models...</div>
+    </div>
+    <div class="modal-content" id="modal-success" style="display:none;">
+      <div class="checkmark">&#10004;</div>
+      <div class="modal-text">Item on the way!</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <span class="nav-ico active">&#8962;</span>
+    <span class="nav-ico">&#128722;</span>
+    <span class="nav-ico">&#128197;</span>
+    <span class="nav-ico">&#9881;</span>
+  </div>
+  <script>
+    // --- Данные
+    const colorVariants = [
+      { label:"Black", code:"#18191a" },
+      { label:"Ultramarine", code:"#3854c6" },
+      { label:"Teal", code:"#24ada5" },
+      { label:"White", code:"#f4f4f5" }
+    ];
+    const memoryVariants = ["128 GB", "256 GB", "512 GB", "1 TB"];
+    const phones = [
+      // iPhones
+      {
+        brand: "Apple", name: "iPhone 15", imgs: [
+          "https://i.ibb.co/wZHM4RsC/15black-1-700x700.webp",
+          "https://i.ibb.co/FkYXW6Pk/15blue-1-700x700.webp",
+          "https://i.ibb.co/nsMGpZDx/15teal-1-700x700.webp",
+          "https://i.ibb.co/kgpjFWrq/15white-1-700x700.webp"
+        ]
+      },
+      {
+        brand: "Apple", name: "iPhone 15 Pro Max", imgs: [
+          "https://i.ibb.co/S4Qc9067/promax15black-titanium-1-700x700.webp",
+          "https://i.ibb.co/nNrMYrNZ/promax15blue-titanium-1-700x700.webp",
+          "https://i.ibb.co/zhHk4Xp1/promax15green-titanium-1-700x700.webp",
+          "https://i.ibb.co/BKNYXhXZ/promax15white-titanium-1-700x700.webp"
+        ]
+      },
+      {
+        brand: "Apple", name: "iPhone 16", imgs: [
+          "https://i.ibb.co/gb2grGQ5/16black-1-700x700.webp",
+          "https://i.ibb.co/BH2B8hXD/16ultramarine-1-700x700.webp",
+          "https://i.ibb.co/bxwRG4c/16teal-1-700x700.webp",
+          "https://i.ibb.co/yFYhdKJM/16white-1-700x700.webp"
+        ]
+      },
+      {
+        brand: "Apple", name: "iPhone 16 Pro Max", imgs: [
+          "https://i.ibb.co/h1mcHFYy/16promaxblack-titanium-1-700x700.webp",
+          "https://i.ibb.co/WW7VXHf5/16promaxdesert-titanium-1-700x700.webp",
+          "https://i.ibb.co/v4k5ywHD/16promaxnatural-titanium-1-700x700.webp",
+          "https://i.ibb.co/zWMqVtJW/16promaxwhite-titanium-1-700x700.webp"
+        ]
+      },
+      // Samsung Galaxy S23
+      {
+        brand: "Samsung", name: "Galaxy S23", imgs: [
+          "https://i.ibb.co/DP26jzKX/s23-black.jpg",
+          "https://i.ibb.co/NntrbRCF/s23-white.jpg",
+          "https://i.ibb.co/NntrbRCF/s23-white.jpg",
+          "https://i.ibb.co/NntrbRCF/s23-white.jpg"
+        ]
+      },
+      // Samsung Galaxy S23 Ultra
+      {
+        brand: "Samsung", name: "Galaxy S23 Ultra", imgs: [
+          "https://i.ibb.co/5XjJztsr/s-23-ultra-black-1-700x700.webp",
+          "https://i.ibb.co/G3dq6tdF/s-23-ultra-white-3-700x700.webp",
+          "https://i.ibb.co/G3dq6tdF/s-23-ultra-white-3-700x700.webp",
+          "https://i.ibb.co/G3dq6tdF/s-23-ultra-white-3-700x700.webp"
+        ]
+      },
+      // Samsung Galaxy S25
+      {
+        brand: "Samsung", name: "Galaxy S25", imgs: [
+          "https://i.ibb.co/FTkj3tH/s25-silver-shadow-4-700x700.webp",
+          "https://i.ibb.co/RVVssLX/s25-icyblue-4-700x700.webp",
+          "https://i.ibb.co/RVVssLX/s25-icyblue-4-700x700.webp",
+          "https://i.ibb.co/FTkj3tH/s25-silver-shadow-4-700x700.webp"
+        ]
+      },
+      // Samsung Galaxy S25 Ultra
+      {
+        brand: "Samsung", name: "Galaxy S25 Ultra", imgs: [
+          "https://i.ibb.co/N2cFBm4Q/s25-ultra-titanium-black-1-700x700.webp",
+          "https://i.ibb.co/B2qjFxBN/s25-ultra-titanium-silverblue-1-700x700.webp",
+          "https://i.ibb.co/B2qjFxBN/s25-ultra-titanium-silverblue-1-700x700.webp",
+          "https://i.ibb.co/B2qjFxBN/s25-ultra-titanium-silverblue-1-700x700.webp"
+        ]
+      },
+      // Google Pixel 8
+      {
+        brand: "Google", name: "Pixel 8", imgs: [
+          "https://i.ibb.co/qYkSHWVQ/pix-xl-obsidi-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp"
+        ]
+      },
+      // Google Pixel 8 Pro
+      {
+        brand: "Google", name: "Pixel 8 Pro", imgs: [
+          "https://i.ibb.co/qYkSHWVQ/pix-xl-obsidi-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp"
+        ]
+      },
+      // Google Pixel 9
+      {
+        brand: "Google", name: "Pixel 9", imgs: [
+          "https://i.ibb.co/qYkSHWVQ/pix-xl-obsidi-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp"
+        ]
+      },
+      // Google Pixel 9 Pro
+      {
+        brand: "Google", name: "Pixel 9 Pro", imgs: [
+          "https://i.ibb.co/qYkSHWVQ/pix-xl-obsidi-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp",
+          "https://i.ibb.co/rRJKN8KS/google-pixel-9-pro-xl-porcelain-700x700.webp"
+        ]
+      }
+    ];
+
+    const brands = [...new Set(phones.map(p=>p.brand))];
+    let selectedBrand = "";
+    let colorIdx = -1;
+    let memoryIdx = -1;
+    let filteredPhones = [];
+    let phoneIdx = 0;
+
+    // DOM
+    const brandBtn = document.getElementById('brand-btn');
+    const brandPopupBg = document.getElementById('brand-popup-bg');
+    const brandList = document.getElementById('brand-list');
+    const colorSelBox = document.getElementById('color-select-box');
+    const memSelBox = document.getElementById('memory-select-box');
+    const carousel = document.getElementById('carousel-area');
+    const phoneBox = document.getElementById('phone-box');
+    const phoneImg = document.getElementById('phone-img');
+    const phoneName = document.getElementById('phone-name');
+    const modalBg = document.getElementById('modal-bg');
+    const modalLoading = document.getElementById('modal-loading');
+    const modalSuccess = document.getElementById('modal-success');
+
+    // 1. Brand popup
+    function renderBrandBtn() {
+      brandBtn.innerHTML = selectedBrand ? `<span style="margin-left:6px;">${selectedBrand}</span>` : '<span style="color:#a6b8d2;margin-left:6px;">Select brand</span>';
+    }
+    renderBrandBtn();
+
+    brandBtn.onclick = () => {
+      brandPopupBg.style.display = 'flex';
+      renderBrandList();
+    };
+    brandPopupBg.onclick = e => {
+      if(e.target === brandPopupBg) brandPopupBg.style.display='none';
+    };
+
+    function renderBrandList(){
+      brandList.innerHTML = brands.map(b =>
+        `<div class="brand-item${b===selectedBrand?' selected':''}" data-b="${b}">${b}</div>`
+      ).join('');
+      document.querySelectorAll('.brand-item').forEach(el=>{
+        el.onclick = ()=>{
+          selectedBrand = el.getAttribute('data-b');
+          filteredPhones = phones.filter(p=>p.brand===selectedBrand);
+          phoneIdx = 0;
+          colorIdx = -1;
+          memoryIdx = -1;
+          brandPopupBg.style.display = 'none';
+          renderBrandBtn();
+          renderColors();
+          renderMemory();
+          hideCarousel();
+        };
+      });
+    }
+
+    // 2. Цвета
+    function renderColors(){
+      colorSelBox.innerHTML = "";
+      colorVariants.forEach((col,i)=>{
+        let el = document.createElement('div');
+        el.className = 'color-dot'+(colorIdx===i?' selected':'');
+        el.style.background = col.code;
+        el.title = col.label;
+        el.setAttribute('tabindex','0');
+        el.onclick = ()=>{ colorIdx=i; renderColors(); tryShowCarousel(); };
+        el.onkeydown = (e)=>{if(e.key==="Enter"){colorIdx=i;renderColors();tryShowCarousel();}};
+        colorSelBox.appendChild(el);
+      });
+    }
+    // 3. Память
+    function renderMemory(){
+      memSelBox.innerHTML = "";
+      memoryVariants.forEach((m,i)=>{
+        let el = document.createElement('button');
+        el.className = 'memory-btn'+(memoryIdx===i?' selected':'');
+        el.innerText = m;
+        el.onclick = ()=>{ memoryIdx=i; renderMemory(); tryShowCarousel(); };
+        memSelBox.appendChild(el);
+      });
+    }
+
+    // 4. Карусель появляется если выбрано всё
+    function tryShowCarousel(){
+      if(colorIdx>-1 && memoryIdx>-1 && selectedBrand){
+        carousel.style.opacity = "1";
+        carousel.style.pointerEvents = "auto";
+        renderCarousel();
+      } else {
+        hideCarousel();
+      }
+    }
+    function hideCarousel(){ carousel.style.opacity="0";carousel.style.pointerEvents="none";}
+
+    // 5. Карусель + анимация (только свайп)
+    let lastAnim = '';
+    function renderCarousel(anim){
+      let ph = filteredPhones[phoneIdx];
+      if(!ph) return;
+      if(anim){
+        phoneBox.classList.remove('animate-left','animate-right');
+        void phoneBox.offsetWidth;
+        phoneBox.classList.add(anim);
+        setTimeout(()=>{phoneBox.classList.remove('animate-left','animate-right');},410);
+      }
+      phoneImg.src = ph.imgs[colorIdx];
+      phoneName.innerText = ph.name;
+    }
+
+    // Touch-свайп для телефона (лево/право)
+    let startX = null;
+    carousel.addEventListener('touchstart', function(e){
+      if(e.touches.length===1) startX = e.touches[0].clientX;
+    });
+    carousel.addEventListener('touchend', function(e){
+      if(startX === null) return;
+      let endX = e.changedTouches[0].clientX;
+      let dx = endX - startX;
+      if(Math.abs(dx) > 40) {
+        if(dx < 0) {
+          phoneIdx = (phoneIdx+1)%filteredPhones.length;
+          renderCarousel('animate-left');
+        } else {
+          phoneIdx = (phoneIdx-1+filteredPhones.length)%filteredPhones.length;
+          renderCarousel('animate-right');
+        }
+      }
+      startX = null;
+    });
+
+    // 6. Клик по телефону — модалка
+    phoneBox.onclick = ()=>{
+      if(carousel.style.opacity!=="1") return;
+      showSearchModal();
+    };
+
+    function showSearchModal() {
+      modalBg.style.display = "";
+      modalLoading.style.display = "";
+      modalSuccess.style.display = "none";
+      setTimeout(()=>{
+        modalLoading.style.display = "none";
+        modalSuccess.style.display = "";
+        setTimeout(()=>{ modalBg.style.display="none"; }, 1200);
+      }, 1600);
+    }
+
+    // Init
+    renderColors();
+    renderMemory();
+  </script>
+</body>
+</html>
