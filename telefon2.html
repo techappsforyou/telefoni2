@@ -9,7 +9,7 @@
     html,body{margin:0;padding:0;background:#f6f8fd;font-family:'Montserrat',Arial,sans-serif;}
     body{min-height:100vh;}
     .container {
-      max-width:410px;
+      max-width:430px;
       margin:0 auto;
       min-height:100vh;
       background:#fafdff;
@@ -21,10 +21,10 @@
       flex-direction:column;
     }
     .main-header {
-      width:100%;padding:17px 0 13px 0;
+      width:100%;padding:12px 0 9px 0;
       background:linear-gradient(91deg,#2e63ec 60%,#6d98fa 100%);
       color:#fff;
-      font-size:23px;
+      font-size:22px;
       font-weight:700;
       letter-spacing:.03em;
       border-radius:0 0 20px 20px;
@@ -33,9 +33,14 @@
       margin-bottom:8px;
     }
     .selector-area {width:95%;margin:0 auto;}
-    .select-label {font-size:15px;color:#263453;margin-bottom:3px;margin-top:10px;}
+    .select-label {
+      font-size:15px;color:#263453;margin-bottom:7px;margin-top:22px;
+      margin-left:10px;
+      font-weight:600; letter-spacing:0.02em;
+    }
+    .selector-area .select-label:first-child {margin-top:18px;}
     .brand-select-btn {
-      width:100%; padding:11px 0 11px 15px; border-radius:10px;
+      width:100%; padding:11px 0 11px 17px; border-radius:10px;
       border:2px solid #d1e0fa; font-size:17px; background:#f6f8ff;
       color:#263453;font-family:'Montserrat',Arial,sans-serif; font-weight:600;
       margin-bottom:1px;transition:.18s;cursor:pointer;
@@ -75,54 +80,61 @@
       box-shadow:0 2px 9px #3875eb23;
     }
     .color-select-box {
-      width:100%;display:flex;gap:12px;margin:10px 0 2px 0;
+      width:100%;display:flex;gap:18px;margin:14px 0 2px 0;
       flex-wrap:wrap;justify-content:center;
     }
     .color-dot {
-      width:35px;height:35px;border-radius:50%;
+      width:38px;height:38px;border-radius:50%;
       border:2.2px solid #dae6f9;box-shadow:0 2px 9px #a4b4d11f;
       cursor:pointer;transition:.14s;
       display:flex;align-items:center;justify-content:center;
       font-size:15px;font-weight:700;margin-bottom:5px;
       position:relative;outline:none;
     }
-    .color-dot.selected { border-color:#3577e7; box-shadow:0 0 0 5px #4e8bff17;}
+    .color-dot.selected { border-color:#3577e7; box-shadow:0 0 0 6px #4e8bff17;}
     .memory-select-box {
       width:99%;display:grid;grid-template-columns:1fr 1fr;
-      gap:10px;margin:10px auto 2px auto;justify-items:center;
+      gap:12px;margin:14px auto 2px auto;justify-items:center;
     }
     .memory-btn {
       border-radius:10px;border:2px solid #d2dffa;
       background:#f5faff;color:#384973;font-weight:700;
-      padding:8.5px 0;font-size:15px;cursor:pointer;transition:.13s;
+      padding:10px 0;font-size:15.2px;cursor:pointer;transition:.13s;
       box-shadow:0 1px 5px #d6e5f744;
-      margin-bottom:0;width:91%;
+      margin-bottom:0;width:98%;
     }
     .memory-btn.selected {
       background:#3577e7;color:#fff;border-color:#3577e7;
       box-shadow:0 2px 8px #74a7fc2a;
     }
     .phone-carousel {
-      margin:15px auto 0 auto;width:100%;
+      margin:18px auto 0 auto;width:98vw;max-width:430px;
       display:flex;align-items:center;justify-content:center;
-      min-height:195px;user-select:none;touch-action:pan-x;
+      min-height:240px;user-select:none;touch-action:pan-x;
       position:relative;
     }
     .phone-box {
-      width:92vw;max-width:330px;
-      background:#fff;border-radius:17px;box-shadow:0 5px 19px #d1e3fd36;
+      width:97vw;max-width:400px;min-height:240px;
+      background:#fff;border-radius:19px;box-shadow:0 5px 19px #d1e3fd36;
       display:flex;flex-direction:column;align-items:center;
-      padding:11px 2px 11px 2px;transition:.22s;
-      border:2px solid #e9eefd;min-height:180px;cursor:pointer;position:relative;
+      padding:18px 4px 18px 4px;transition:.22s;
+      border:2px solid #e9eefd;cursor:pointer;position:relative;
       overflow:hidden;
       margin:0 auto;
+      justify-content:center;
     }
     .phone-img {
-      width:110px;height:140px;object-fit:contain;
-      margin-bottom:6px;transition:.21s;
+      width:180px;height:200px;object-fit:contain;
+      margin-bottom:13px;transition:.21s;
       display:block;
+      max-width:96%;
     }
-    .phone-name {font-size:17px;color:#18233a;font-weight:700;}
+    .phone-name {
+      font-size:21px;color:#18233a;font-weight:700;
+      margin-top:0;margin-bottom:0;
+      letter-spacing:0.01em;
+      text-align:center;
+    }
     .phone-box.animate-left, .phone-box.animate-right {animation-duration:.41s;animation-fill-mode:forwards;}
     .phone-box.animate-left {animation-name:swipeLeft;}
     .phone-box.animate-right {animation-name:swipeRight;}
@@ -177,10 +189,18 @@
     @media (max-width:460px){
       .container{padding:0 0 56px 0;}
       .selector-area{width:99%;}
-      .main-header{font-size:20px;padding:14px 0 9px 0;}
-      .phone-box{width:98vw;max-width:330px;}
+      .main-header{font-size:18.5px;padding:10px 0 6px 0;}
+      .phone-box{width:99vw;max-width:420px;min-height:220px;}
       .modal-content{padding:19px 2vw 14px 2vw;}
-      .phone-img{width:120px;height:158px;}
+      .phone-img{width:155px;height:178px;}
+      .phone-name{font-size:19px;}
+      .memory-btn{font-size:14.8px;}
+      .color-dot{width:36px;height:36px;}
+      .select-label{font-size:14px;}
+    }
+    @media (max-width:375px){
+      .phone-box{padding:9px 2px 9px 2px;}
+      .phone-img{width:120px;height:140px;}
     }
     @keyframes popupShow {from{transform:scale(.92);opacity:0;}to{transform:scale(1);opacity:1;}}
   </style>
@@ -198,7 +218,7 @@
           <div class="brand-list" id="brand-list"></div>
         </div>
       </div>
-      <div class="select-label" style="margin-top:9px;">Color</div>
+      <div class="select-label" style="margin-top:17px;">Color</div>
       <div class="color-select-box" id="color-select-box"></div>
       <div class="select-label">Memory capacity</div>
       <div class="memory-select-box" id="memory-select-box"></div>
@@ -368,7 +388,7 @@
 
     // 1. Brand popup
     function renderBrandBtn() {
-      brandBtn.innerHTML = selectedBrand ? `<span style="margin-left:6px;">${selectedBrand}</span>` : '<span style="color:#a6b8d2;margin-left:6px;">Select brand</span>';
+      brandBtn.innerHTML = selectedBrand ? `<span style="margin-left:10px;">${selectedBrand}</span>` : '<span style="color:#a6b8d2;margin-left:10px;">Select brand</span>';
     }
     renderBrandBtn();
 
