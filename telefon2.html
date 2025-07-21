@@ -249,6 +249,13 @@
     <span class="nav-ico">&#9881;</span>
   </div>
   <script>
+
+    const brandLabels = {
+  "Apple": "iPhone",
+  "Samsung": "Galaxy Series",
+  "Google": "Pixel"
+};
+
     // --- Данные
     const colorVariants = [
       { label:"Black", code:"#18191a" },
@@ -388,7 +395,10 @@
 
     // 1. Brand popup
     function renderBrandBtn() {
-      brandBtn.innerHTML = selectedBrand ? `<span style="margin-left:10px;">${selectedBrand}</span>` : '<span style="color:#a6b8d2;margin-left:10px;">Select brand</span>';
+      brandBtn.innerHTML = selectedBrand
+  ? `<span style="margin-left:10px;">${brandLabels[selectedBrand]}</span>`
+  : '<span style="color:#a6b8d2;margin-left:10px;">Select brand</span>';
+
     }
     renderBrandBtn();
 
@@ -401,9 +411,10 @@
     };
 
     function renderBrandList(){
-      brandList.innerHTML = brands.map(b =>
-        `<div class="brand-item${b===selectedBrand?' selected':''}" data-b="${b}">${b}</div>`
-      ).join('');
+     brandList.innerHTML = brands.map(b =>
+  `<div class="brand-item${b===selectedBrand?' selected':''}" data-b="${b}">${brandLabels[b]}</div>`
+).join('');
+
       document.querySelectorAll('.brand-item').forEach(el=>{
         el.onclick = ()=>{
           selectedBrand = el.getAttribute('data-b');
